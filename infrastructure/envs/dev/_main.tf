@@ -324,7 +324,7 @@ resource "aws_ecs_task_definition" "devexchsvc_ui_task" {
   container_definitions = jsonencode([
     {
       name   = local.ecr_name_frontend
-      image  = "${var.backend_ecr_image}:${var.image_tag}"
+      image  = "${var.frontend_ecr_image}:${var.image_tag}"
       cpu    = 256
       memory = 512
       portMappings = [
