@@ -1,0 +1,101 @@
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-deploy:
+    environment: DEV
+    name: Build backend, UI and deploy Terraform
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      PROJECT_NAME: devexchsvc
+      ENV: dev
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Get AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build & Push Backend Image
+        working-directory: backend
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ vars.ECR_BACKEND_REPOSITORY_NAME }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.1
+
+      - name: Terraform Init
+        working-directory: infrastructure/envs/dev
+        run: terraform init
+
+      - name: Get Backend ALB DNS
+        id: alb_dns
+        run: |
+          echo "alb_url=$(aws elbv2 describe-load-balancers \
+            --names ${PROJECT_NAME}-alb-${ENV} \
+            --query 'LoadBalancers[0].DNSName' \
+            --output text)" >> $GITHUB_OUTPUT
+
+      - name: Inject API Base URL into Frontend
+        run: |
+          echo "VITE_API_BASE_URL=http://${{ steps.alb_dns.outputs.alb_url }}/api" > frontend/.env
+
+      - name: Build & Push UI Image
+        working-directory: frontend
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ vars.ECR_FRONTEND_REPOSITORY_NAME }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: Terraform Plan with image overrides
+        working-directory: infrastructure/envs/dev
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          terraform plan -out=tfplan.out \
+            -var image_tag="$IMAGE_TAG"
+
+      - name: Terraform Apply
+        working-directory: infrastructure/envs/dev
+        run: terraform apply -auto-approve tfplan.out
+
+      - name: Force ECS UI Service Update
+        run: |
+          aws ecs update-service \
+            --cluster "${PROJECT_NAME}-ecs-cluster-${ENV}" \
+            --service "${PROJECT_NAME}-ui-service-${ENV}" \
+            --force-new-deployment \
+            | cat
+
+      - name: Force ECS Backend Service Update
+        run: |
+          aws ecs update-service \
+            --cluster "${PROJECT_NAME}-ecs-cluster-${ENV}" \
+            --service "${PROJECT_NAME}-ecs-service-${ENV}" \
+            --force-new-deployment \
+            | cat
