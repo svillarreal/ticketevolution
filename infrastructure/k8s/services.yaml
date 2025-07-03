@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: devexchl-be-svc
+  namespace: devexchl-be
+spec:
+  selector:
+    app: devexchapp-be
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000

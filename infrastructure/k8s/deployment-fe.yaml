@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devexchsvc-fe-deployment
+  namespace: devexchl-fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: devexchsvc-fe
+  template:
+    metadata:
+      labels:
+        app: devexchsvc-fe
+    spec:
+      containers:
+        - name: devexchsvc-fe
+          image: shiryuknight/devex-fullstack-challenge-fe:v1.0.2
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"

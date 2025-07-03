@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devexchl-fe
+  labels:
+    name: devexchl-fe
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devexchl-be
+  labels:
+    name: devexchl-be

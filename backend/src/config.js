@@ -25,14 +25,16 @@ async function getSecret(secretName) {
 
 export async function loadConfig() {
   try {
-    const secret = await getSecret("devexchsvc-secret-dev");
-    console.log("Parsed secret:", secret);
-
-    process.env.PGUSER = secret.username;
-    process.env.PGPASSWORD = secret.password;
-    process.env.PGHOST = secret.host;
-    process.env.PGDATABASE = secret.database;
-    process.env.PGPORT = secret.port;
+    let secret;
+    const container = process.env.CONTAINER;
+    if (container !== "k8s") {
+      secret = await getSecret("devexchsvc-secret-dev");
+      process.env.PGUSER = secret.username;
+      process.env.PGPASSWORD = secret.password;
+      process.env.PGHOST = secret.host;
+      process.env.PGDATABASE = secret.database;
+      process.env.PGPORT = secret.port;
+    }
 
     console.log("Final DB Config:");
     console.log({
@@ -42,7 +44,6 @@ export async function loadConfig() {
       database: process.env.PGDATABASE,
       port: process.env.PGPORT,
     });
-
     console.log("Secret and DB config loaded successfully!");
   } catch (error) {
     console.error("Failed to load config:", error);
