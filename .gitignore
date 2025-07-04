@@ -3,3 +3,6 @@
 node_modules
 terraform.tfstate
 *.zip
+pg_config.yaml
+.idea
+target
