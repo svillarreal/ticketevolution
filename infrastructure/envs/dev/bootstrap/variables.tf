@@ -1,5 +1,5 @@
 variable "project" {
-  default = "devexchsvc"
+  default = "ticketevol"
 }
 
 variable "env" {

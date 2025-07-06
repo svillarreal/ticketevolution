@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devexchapp-be-deployment
-  namespace: devexchl-be
+  name: ticketevolapp-be-deployment
+  namespace: ticketevol-be
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: devexchapp-be
+      app: ticketevolapp-be
   template:
     metadata:
       labels:
-        app: devexchapp-be
+        app: ticketevolapp-be
     spec:
       # volumes:
-      #   - name: devexchl-pg-postgresql-secret-volume
+      #   - name: ticketevol-pg-postgresql-secret-volume
       #     secret:
-      #       secretName: devexchl-pg-postgresql
+      #       secretName: ticketevol-pg-postgresql
       containers:
-        - name: devexchapp-be
-          image: shiryuknight/devex-fullstack-challenge-be:v1.0.2
+        - name: ticketevolapp-be
+          image: shiryuknight/ticketevolution-be:v1.0.2
           imagePullPolicy: Always
           # volumeMounts:
-          #   - mountPath: "/etc/devexchl-pg-postgresql-secret-volume"
+          #   - mountPath: "/etc/ticketevol-pg-postgresql-secret-volume"
           #     readOnly: true
-          #     name: devexchl-pg-postgresql-secret-volume
+          #     name: ticketevol-pg-postgresql-secret-volume
           ports:
             - containerPort: 3000
           env:
@@ -34,24 +34,24 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: devexchl-pg-postgresql
+                  name: ticketevol-pg-postgresql
             - name: PGHOST
-              value: devexchl-pg-postgresql-hl.devexchl-be.svc.cluster.local
+              value: ticketevol-pg-postgresql-hl.ticketevol-be.svc.cluster.local
             - name: PGPORT
               valueFrom:
                 secretKeyRef:
                   key: port
-                  name: devexchl-pg-postgresql
+                  name: ticketevol-pg-postgresql
             - name: PGDATABASE
               valueFrom:
                 secretKeyRef:
                   key: database
-                  name: devexchl-pg-postgresql
+                  name: ticketevol-pg-postgresql
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   key: username
-                  name: devexchl-pg-postgresql
+                  name: ticketevol-pg-postgresql
           resources:
             requests:
               cpu: "250m"

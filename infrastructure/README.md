@@ -18,7 +18,7 @@ In `backend.tf`, reference the bucket directly:
 terraform {
   backend "s3" {
     bucket = "terraform-remote-state-svillarreal"
-    key    = "devex-fullstack-challenge/secrets.tfstate"
+    key    = "ticketevolution/secrets.tfstate"
     region = "us-east-1"
   }
 }
@@ -28,11 +28,11 @@ Secondly, you need to deploy bootstrap stack, since Aurora RDS depends on it. Af
 
 ```json
 {
-  "username": "devexchsvc_admin",
+  "username": "ticketevolution_admin",
   "password": "...",
   "host": "initially empty, fill later after stack creation",
   "port": "5432",
-  "database": "devexchsvc_db_dev"
+  "database": "ticketevolution_db_dev"
 }
 ```
 
@@ -45,8 +45,8 @@ After running `terraform apply` for the first time, set the following variables 
 | Environment | Environment name | DEV     |
 
 | ECR_BACKEND_REPOSITORY_NAME
-| Name of the ECR repo for backend Docker images | devexchsvc-ecr-backend-repo-dev |
-| ECR_FRONTEND_REPOSITORY_NAME | Name of the ECR repo for backend Docker images | devexchsvc-ecr-frontend-repo-dev |
+| Name of the ECR repo for backend Docker images | ticketevolution-ecr-backend-repo-dev |
+| ECR_FRONTEND_REPOSITORY_NAME | Name of the ECR repo for backend Docker images | ticketevolution-ecr-frontend-repo-dev |
 | ROLE_TO_ASSUME | IAM role ARN to assume from GitHub Actions | arn:aws:iam::123456789012:role/github-actions-role-dev |
 
 ## Requirements

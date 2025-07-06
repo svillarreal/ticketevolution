@@ -1,5 +1,5 @@
 variable "project" {
-  default = "devexchsvc"
+  default = "ticketevolution"
 }
 
 variable "env" {
@@ -7,11 +7,11 @@ variable "env" {
 }
 
 variable "backend_ecr_image" {
-  default = "851717133722.dkr.ecr.us-east-1.amazonaws.com/devexchsvc-ecr-repo-dev"
+  default = "851717133722.dkr.ecr.us-east-1.amazonaws.com/ticketevolution-ecr-repo-dev"
 }
 
 variable "frontend_ecr_image" {
-  default = "851717133722.dkr.ecr.us-east-1.amazonaws.com/devexchsvc-ui-ecr-repo-dev"
+  default = "851717133722.dkr.ecr.us-east-1.amazonaws.com/ticketevolution-ui-ecr-repo-dev"
 }
 
 variable "image_tag" {

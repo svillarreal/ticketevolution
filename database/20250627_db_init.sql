@@ -1,14 +1,19 @@
-CREATE TABLE events (
+CREATE TABLE event (
   id UUID PRIMARY KEY,
   name TEXT NOT NULL,
-  available INTEGER NOT NULL CHECK (available >= 0)
+  total_tickets int4 NOT NULL,
+  sold_tickets int4 NOT NULL,
+  price INTEGER,
+  event_date TIMESTAMPTZ
 );
 
+
 CREATE TABLE orders (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id UUID PRIMARY KEY,
+  event_id UUID NOT NULL,
   user_id UUID NOT NULL,
-  event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
-  created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+  total_tickets int4 NOT NULL,
+  created_at TIMESTAMPTZ
 );
 
 CREATE INDEX idx_orders_event_id ON orders(event_id);

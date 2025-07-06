@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devexchsvc-fe-deployment
-  namespace: devexchl-fe
+  name: ticketevolsvc-fe-deployment
+  namespace: ticketevol-fe
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: devexchsvc-fe
+      app: ticketevolsvc-fe
   template:
     metadata:
       labels:
-        app: devexchsvc-fe
+        app: ticketevolsvc-fe
     spec:
       containers:
-        - name: devexchsvc-fe
-          image: shiryuknight/devex-fullstack-challenge-fe:v1.0.2
+        - name: ticketevolsvc-fe
+          image: shiryuknight/ticketevolution-fe:v1.0.2
           ports:
             - containerPort: 80
           resources:

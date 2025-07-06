@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "terraform-remote-state-svillarreal"
-    key    = "devex-fullstack-challenge/dev"
+    key    = "ticketevolution/dev"
     region = "us-east-1"
   }
 }

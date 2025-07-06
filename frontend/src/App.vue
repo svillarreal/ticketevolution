@@ -1,6 +1,6 @@
 <template>
   <div style="max-width: 600px; margin: auto; padding: 2rem">
-    <h1>DevEx Demo - By Santiago Villarreal</h1>
+    <h1>Ticket Evolution - By Santiago Villarreal</h1>
 
     <section style="margin-bottom: 2rem">
       <h2>Create Event</h2>
