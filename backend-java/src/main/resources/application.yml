@@ -4,9 +4,9 @@ spring:
   application:
     name: ticketevolution
   datasource:
-    url: jdbc:postgresql://localhost:5432/ticketevolutiondb
-    username: ticketevolutionapp
-    password: e3f4a48660ilm
+    url: jdbc:postgresql://${PGHOST:localhost}:${PGPORT}/${PGDATABASE}
+    username: ${PGUSERNAME}
+    password: ${PGPASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
@@ -15,3 +15,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+server:
+  servlet:
+    contextPath: /api
+

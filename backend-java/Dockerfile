@@ -5,4 +5,5 @@ RUN mvn clean install
 
 FROM amazoncorretto:21 AS run
 COPY --from=build target .
-ENTRYPOINT ["java", "Dspring.profiles.active=docker", "-jar", "ticketevolution-0.0.1-SNAPSHOT.jar"]
+# Set the SPRING_PROFILES_ACTIVE environment variable
+ENTRYPOINT ["java", "-jar", "ticketevolution-0.0.1-SNAPSHOT.jar"]

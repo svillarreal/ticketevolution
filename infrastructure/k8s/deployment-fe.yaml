@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: ticketevolsvc-fe
-          image: shiryuknight/ticketevolution-fe:v1.0.2
+          image: shiryuknight/ticketevolution-fe:v1.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           resources:

@@ -6,3 +6,4 @@ terraform.tfstate
 pg_config.yaml
 .idea
 target
+pg-secret.yml

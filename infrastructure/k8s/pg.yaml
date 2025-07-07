@@ -62,24 +62,6 @@ metadata:
     helm.sh/chart: postgresql-16.7.15
 automountServiceAccountToken: false
 ---
-# Source: postgresql/templates/secrets.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ticketevolution-pg-postgresql
-  namespace: "ticketevol-be"
-  labels:
-    app.kubernetes.io/instance: ticketevolution-pg
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: postgresql
-    app.kubernetes.io/version: 17.5.0
-    helm.sh/chart: postgresql-16.7.15
-type: Opaque
-data:
-  postgres-password: "dTB3d21mdW5OTQ=="
-  password: "ZTNmNGE0ODY2MGlsbQ=="
-  # We don't auto-generate LDAP password when it's not provided as we do for other passwords
----
 # Source: postgresql/templates/primary/svc-headless.yaml
 apiVersion: v1
 kind: Service
@@ -172,11 +154,11 @@ spec:
         app.kubernetes.io/component: primary
     spec:
       serviceAccountName: ticketevolution-pg-postgresql
-      
+
       automountServiceAccountToken: false
       affinity:
         podAffinity:
-          
+
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
@@ -188,7 +170,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
-          
+
       securityContext:
         fsGroup: 1001
         fsGroupChangePolicy: Always
@@ -204,7 +186,7 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
-              - ALL
+                - ALL
             privileged: false
             readOnlyRootFilesystem: true
             runAsGroup: 1001
