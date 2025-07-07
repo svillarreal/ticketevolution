@@ -6,12 +6,16 @@
       <h2>Create Event</h2>
       <form @submit.prevent="createEvent">
         <label>
-          Event ID:
-          <input v-model="event.id" required />
-        </label>
-        <label>
           Name:
           <input v-model="event.name" required />
+        </label>
+        <label>
+          Price:
+          <input v-model="event.price" required />
+        </label>
+        <label>
+          Date:
+          <input v-model="event.eventDate" required />
         </label>
         <label>
           Total Tickets:
@@ -33,6 +37,10 @@
           Event ID:
           <input v-model="order.eventId" required />
         </label>
+        <label>
+          Quantity:
+          <input v-model="order.totalTickets" required />
+        </label>
         <button type="submit">Create Order</button>
       </form>
       <p v-if="orderResult">{{ orderResult }}</p>
@@ -43,7 +51,7 @@
       <button @click="loadEvents">Load Events</button>
       <ul v-if="events.length">
         <li v-for="e in events" :key="e.id">
-          {{ e.name }} (ID: {{ e.id }}) — Available: {{ e.available }}
+          {{ e.name }} (ID: {{ e.id }}) — Available: {{ e.totalTickets - e.soldTickets }}
         </li>
       </ul>
       <p v-else>No events loaded.</p>
@@ -66,8 +74,8 @@
 <script setup>
 import { ref } from "vue";
 
-const event = ref({ id: "", name: "", totalTickets: 0 });
-const order = ref({ userId: "", eventId: "" });
+const event = ref({ name: "", totalTickets: 0 });
+const order = ref({ userId: "", eventId: "", totalTickets: "" });
 
 const events = ref([]);
 const orders = ref([]);
