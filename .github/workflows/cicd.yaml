@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: us-east-1
-      PROJECT_NAME: devexchsvc
+      PROJECT_NAME: ticketevolution
       ENV: dev
     steps:
       - name: Checkout repo
