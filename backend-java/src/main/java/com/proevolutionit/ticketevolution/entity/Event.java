@@ -1,5 +1,6 @@
 package com.proevolutionit.ticketevolution.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
+    @JsonFormat(pattern="dd/MM/yyyy")
     private Date eventDate;
     private Integer price;
     private Integer totalTickets;

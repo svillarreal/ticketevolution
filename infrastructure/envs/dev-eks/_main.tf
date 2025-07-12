@@ -45,7 +45,7 @@ module "eks" {
       max_size     = 2
       desired_size = 2
 
-      instance_types  = ["t3.medium"]
+      instance_types  = ["t3.large"]
       capacity_type   = "SPOT"
       create_iam_role = true
 
@@ -83,13 +83,6 @@ module "aws_lb_controller_irsa" {
 resource "kubernetes_namespace" "ticketevol_be_ns" {
   metadata {
     name = "ticketevol-be"
-  }
-}
-
-
-resource "kubernetes_namespace" "ticketevol_fe_ns" {
-  metadata {
-    name = "ticketevol-fe"
   }
 }
 
@@ -140,7 +133,7 @@ resource "helm_release" "postgresql" {
       }
     })
   ]
-  depends_on = [ module.eks ]
+  depends_on = [module.eks]
 }
 
 resource "helm_release" "aws_lb_controller" {
@@ -160,6 +153,6 @@ resource "helm_release" "aws_lb_controller" {
     name  = "serviceAccount.name"
     value = "aws-load-balancer-controller"
   }
-  depends_on = [ module.eks ]
+  depends_on = [module.eks]
 }
 

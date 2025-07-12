@@ -1,6 +1,6 @@
 <template>
-  <div style="max-width: 600px; margin: auto; padding: 2rem">
-    <h1>Ticket Evolution - By Santiago Villarreal</h1>
+  <div class="greetings">
+    <h1 class="green">Ticket Evolution - By Santiago Villarreal</h1>
 
     <section style="margin-bottom: 2rem">
       <h2>Create Event</h2>
@@ -62,8 +62,8 @@
       <button @click="loadOrders">Load Orders</button>
       <ul v-if="orders.length">
         <li v-for="o in orders" :key="o.id">
-          Order {{ o.id }}: User {{ o.user_id }} → Event {{ o.event_id }} @
-          {{ new Date(o.created_at).toLocaleString() }}
+          Order {{ o.id }}: User {{ o.userId }} → Event {{ o.eventId }} @
+          {{ new Date(o.createdAt).toLocaleString() }}
         </li>
       </ul>
       <p v-else>No orders loaded.</p>
@@ -85,7 +85,7 @@ const orderResult = ref("");
 
 const createEvent = async () => {
   eventResult.value = "Sending…";
-  const res = await fetch("/api/events", {
+  const res = await fetch("/api/event", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(event.value),
@@ -95,7 +95,7 @@ const createEvent = async () => {
 
 const createOrder = async () => {
   orderResult.value = "Sending…";
-  const res = await fetch("/api/orders", {
+  const res = await fetch("/api/order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(order.value),
@@ -106,7 +106,20 @@ const createOrder = async () => {
 const loadEvents = async () => {
   events.value = [];
   try {
-    const res = await fetch("/api/events");
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({});
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    const res = await fetch("/api/event/find", requestOptions);
     events.value = await res.json();
   } catch (err) {
     console.error(err);
@@ -116,7 +129,19 @@ const loadEvents = async () => {
 const loadOrders = async () => {
   orders.value = [];
   try {
-    const res = await fetch("/api/orders");
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({});
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    const res = await fetch("/api/order/find", requestOptions);
     orders.value = await res.json();
   } catch (err) {
     console.error(err);
@@ -124,24 +149,29 @@ const loadOrders = async () => {
 };
 </script>
 
-<style>
-label {
-  display: block;
-  margin-top: 0.5rem;
+
+<style scoped>
+h1 {
+  font-weight: 500;
+  font-size: 2.6rem;
+  position: relative;
+  top: -10px;
 }
-input {
-  width: 100%;
-  padding: 0.25rem;
-  margin-bottom: 0.5rem;
+
+h3 {
+  font-size: 1.2rem;
 }
-button {
-  margin-top: 0.5rem;
+
+.greetings h1,
+.greetings h3 {
+  text-align: center;
 }
-ul {
-  margin-top: 0.5rem;
-  padding-left: 1rem;
-}
-li {
-  margin-bottom: 0.25rem;
+
+@media (min-width: 1024px) {
+
+  .greetings h1,
+  .greetings h3 {
+    text-align: left;
+  }
 }
 </style>
