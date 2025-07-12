@@ -140,6 +140,7 @@ resource "helm_release" "postgresql" {
       }
     })
   ]
+  depends_on = [ module.eks ]
 }
 
 resource "helm_release" "aws_lb_controller" {
@@ -159,5 +160,6 @@ resource "helm_release" "aws_lb_controller" {
     name  = "serviceAccount.name"
     value = "aws-load-balancer-controller"
   }
+  depends_on = [ module.eks ]
 }
 

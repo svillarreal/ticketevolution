@@ -7,16 +7,21 @@ provider "aws" {
   }
 }
 
-provider "kubernetes" {
-  # Tell it to read your local kubeconfig
-  config_path    = pathexpand("~/.kube/config")
-  # (optional) if you need a specific context:
-  # config_context = "arn:aws:eks:us-east-1:851717133722:cluster/ticketevolution-eks-dev"
-}
-
 provider "helm" {
   kubernetes {
-    config_path    = pathexpand("~/.kube/config")
-    # config_context = "arn:aws:eks:us-east-1:851717133722:cluster/ticketevolution-eks-dev"
+    host                   = module.eks.cluster_endpoint
+    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+    token                  = data.aws_eks_cluster_auth.auth.token
   }
+}
+
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.auth.token
+
+  # (optional) if you want to debug:
+  # load_config_file       = false
+  # exec                   = {}
 }
