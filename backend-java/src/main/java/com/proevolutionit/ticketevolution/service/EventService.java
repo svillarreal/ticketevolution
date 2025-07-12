@@ -2,11 +2,14 @@ package com.proevolutionit.ticketevolution.service;
 
 import com.proevolutionit.ticketevolution.entity.Event;
 import com.proevolutionit.ticketevolution.entity.Order;
-import jakarta.transaction.Transactional;
+import com.proevolutionit.ticketevolution.entity.dto.EventDto;
+
+import java.util.List;
 
 public interface EventService {
     void createEvent(Event event);
 
-    @Transactional
     void sellTickets(Order order);
+
+    List<Event> getEvents(EventDto eventDto);
 }

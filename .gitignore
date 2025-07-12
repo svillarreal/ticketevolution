@@ -1,5 +1,6 @@
 .DS_Store
 .terraform
+errored.tfstate
 node_modules
 terraform.tfstate
 *.zip

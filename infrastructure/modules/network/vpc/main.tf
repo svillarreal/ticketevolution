@@ -19,6 +19,7 @@ resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.main.id
   availability_zone = each.key
   cidr_block        = each.value
+  tags              = var.private_subnet_tags
 }
 
 resource "aws_subnet" "public" {
@@ -27,6 +28,7 @@ resource "aws_subnet" "public" {
   availability_zone       = each.key
   cidr_block              = each.value
   map_public_ip_on_launch = true
+  tags                    = var.public_subnet_tags
 }
 
 resource "aws_internet_gateway" "igw" {
