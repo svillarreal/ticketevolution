@@ -7,8 +7,10 @@ pipeline {
             }
         }
         stage('Checkout') {
-            git branch: 'main',
-                    url: 'https://github.com/svillarreal/ticketevolution.git'
+            steps {
+                git branch: 'main',
+                        url: 'https://github.com/svillarreal/ticketevolution.git'
+            }
         }
         stage('Build and push docker image') {
             steps {
