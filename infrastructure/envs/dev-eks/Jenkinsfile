@@ -17,6 +17,7 @@ pipeline {
             steps {
                 withAWS(region: 'us-east-1', credentials: 'aws-credentials-svillarreal') {
                     sh '''
+                    cd infrastructure/envs/dev-eks
                     terraform init
                     terraform plan -out=tf.plan
                 '''
@@ -31,7 +32,10 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 withAWS(region: 'us-east-1', credentials: 'aws-credentials-svillarreal') {
-                    sh 'terraform apply -json tf.plan'
+                    sh '''
+                        cd infrastructure/envs/dev-eks
+                        terraform apply -json tf.plan'
+                    '''
                 }
             }
         }
