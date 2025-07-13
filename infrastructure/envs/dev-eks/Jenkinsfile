@@ -34,7 +34,7 @@ pipeline {
                 withAWS(region: 'us-east-1', credentials: 'aws-credentials-svillarreal') {
                     sh '''
                         cd infrastructure/envs/dev-eks
-                        terraform apply -json tf.plan'
+                        terraform apply tf.plan
                     '''
                 }
             }
