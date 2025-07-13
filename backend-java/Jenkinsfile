@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Build and push docker image') {
             steps {
-                sh 'docker buildx build --platform linux/amd64,linux/arm64 -t shiryuknight/ticketevolution-be:v1.0.10 --push .'
+                sh 'cd backend-java && docker buildx build --platform linux/amd64,linux/arm64 -t shiryuknight/ticketevolution-be:v1.0.10 --push .'
             }
         }
     }
