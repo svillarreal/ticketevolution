@@ -1,0 +1,38 @@
+
+pipeline {
+    agent any
+    stages {
+        stage('Init')
+            steps {
+                cleanWs()
+            }
+        stage('Checkout') {
+            steps {
+                git branch 'main',
+                    url: 'https://github.com/svillarreal/ticketevolution.git'
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                withAWS(region: 'us-east-1', credentials: 'aws-credentials-svillarreal') {
+                    sh '''
+                    terraform init
+                    terraform plan -out=tf.plan
+                '''
+                }
+            }
+        }
+        stage('Approve') {
+            steps {
+                input message: 'Do you approve?', ok: 'Yes', cancel: 'No'
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                withAWS(region: 'us-east-1', credentials: 'aws-credentials-svillarreal') {
+                    sh 'terraform apply -json tf.plan'
+                }
+            }
+        }
+    }
+}

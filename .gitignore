@@ -3,6 +3,7 @@
 errored.tfstate
 node_modules
 terraform.tfstate
+tf.plan
 *.zip
 pg_config.yaml
 .idea
