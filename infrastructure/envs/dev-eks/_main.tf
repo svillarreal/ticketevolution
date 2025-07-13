@@ -86,6 +86,12 @@ resource "kubernetes_namespace" "ticketevol_be_ns" {
   }
 }
 
+resource "kubernetes_namespace" "argocd_ns" {
+  metadata {
+    name = "argocd"
+  }
+}
+
 resource "kubernetes_service_account" "lb_service_account" {
   metadata {
     namespace = "kube-system"
@@ -156,3 +162,49 @@ resource "helm_release" "aws_lb_controller" {
   depends_on = [module.eks]
 }
 
+resource "helm_release" "argocd" {
+  name             = "argocd"
+  namespace        = "argocd"
+  create_namespace = true
+
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+  version    = "5.46.7" # Check latest if needed
+  depends_on = [module.eks]
+  values = [<<-EOF
+    # Disable unused components
+    controller:
+      replicas: 1
+
+    server:
+      replicas: 1
+      service:
+        type: ClusterIP # Use LoadBalancer or Ingress only if needed
+
+    repoServer:
+      replicas: 1
+
+    applicationSet:
+      enabled: false # Disable unless needed
+
+    dex:
+      enabled: false # Turn off SSO if not needed
+
+    notifications:
+      enabled: false
+
+    redis:
+      enabled: true
+      replicas: 1
+
+    # Optional: Reduce resource usage
+    resources:
+      limits:
+        cpu: 250m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+  EOF
+  ]
+}
