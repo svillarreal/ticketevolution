@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ticketevolapp-be-deployment
-  namespace: ticketevol-be
+  namespace: ticketevol
 spec:
   replicas: 1
   selector:
@@ -37,7 +37,7 @@ spec:
                   key: password
                   name: ticketevolution-pg-postgresql
             - name: PGHOST
-              value: ticketevolution-pg-postgresql-hl.ticketevol-be.svc.cluster.local
+              value: ticketevolution-pg-postgresql-hl.ticketevol.svc.cluster.local
               # value: localhost
             - name: PGPORT
               value: "5432"
@@ -58,7 +58,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ticketevol-be-svc
-  namespace: ticketevol-be
+  namespace: ticketevol
 spec:
   selector:
     app: ticketevolapp-be
@@ -72,7 +72,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ticketevol-fe-svc
-  namespace: ticketevol-be
+  namespace: ticketevol
 spec:
   selector:
     app: ticketevolapp-fe
@@ -94,7 +94,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ticketevol-ingress
-  namespace: ticketevol-be
+  namespace: ticketevol
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
@@ -124,7 +124,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ticketevolapp-fe-deployment
-  namespace: ticketevol-be
+  namespace: ticketevol
 spec:
   replicas: 1
   selector:

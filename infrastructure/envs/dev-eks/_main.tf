@@ -41,9 +41,9 @@ module "eks" {
   cluster_endpoint_private_access          = true
   eks_managed_node_groups = {
     default = {
-      min_size     = 2
+      min_size     = 1
       max_size     = 2
-      desired_size = 2
+      desired_size = 1
 
       instance_types  = ["t3.large"]
       capacity_type   = "SPOT"
@@ -77,12 +77,12 @@ module "aws_lb_controller_irsa" {
       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
   }
-
+  depends_on = [module.eks]
 }
 
 resource "kubernetes_namespace" "ticketevol_be_ns" {
   metadata {
-    name = "ticketevol-be"
+    name = "ticketevol"
   }
 }
 
@@ -110,7 +110,7 @@ resource "helm_release" "postgresql" {
   name       = "ticketevolution-pg"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "postgresql"
-  namespace  = "ticketevol-be"
+  namespace  = "ticketevol"
   version    = "15.2.0"
 
   values = [

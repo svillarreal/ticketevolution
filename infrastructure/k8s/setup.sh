@@ -24,7 +24,7 @@ kaf pg-sealed-secret.yaml
 ##  password: yT8-...
 ##  postgresPassword: bK3...
 # Maybe it can be generated automatically? So we don't depend on manual steps
-helm template ticketevolution-pg oci://registry-1.docker.io/bitnamicharts/postgresql -n ticketevol-be -f pg_config.yaml > pg.yaml
+helm template ticketevolution-pg oci://registry-1.docker.io/bitnamicharts/postgresql -n ticketevol -f pg_config.yaml > pg.yaml
 
 kaf pg.yaml 
 
