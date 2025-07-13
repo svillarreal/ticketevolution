@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('DockerHub')
+    }
     stages {
         stage('Init') {
             steps {
@@ -12,9 +15,17 @@ pipeline {
                         url: 'https://github.com/svillarreal/ticketevolution.git'
             }
         }
+        stage('Docker Login') {
+            steps {
+                sh ' echo $DOCKERHUB_CREDENTIALS_PWD | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin '
+            }
+        }
         stage('Build and push docker image') {
             steps {
-                sh 'cd backend-java && docker buildx build --platform linux/amd64,linux/arm64 -t shiryuknight/ticketevolution-be:v1.0.10 --push .'
+                sh '''
+                    cd backend-java
+                    docker buildx build --platform linux/amd64,linux/arm64 -t shiryuknight/ticketevolution-be:v1.0.10 --push .
+                '''
             }
         }
     }
