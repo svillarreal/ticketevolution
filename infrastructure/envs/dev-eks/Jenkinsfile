@@ -15,11 +15,13 @@ pipeline {
         }
         stage('Terraform Validate') {
             steps {
-                sh '''
+                withAWS(region: 'us-east-1', credentials: 'aws-credentials-svillarreal') {
+                    sh '''
                     cd infrastructure/envs/dev-eks
                     terraform init
                     terraform validate
                 '''
+                }
             }
         }
         stage('Terraform Plan') {
