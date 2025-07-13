@@ -2,10 +2,11 @@
 pipeline {
     agent any
     stages {
-        stage('Init')
+        stage('Init') {
             steps {
                 cleanWs()
             }
+        }
         stage('Checkout') {
             steps {
                 git branch: 'main',
