@@ -8,8 +8,8 @@ pipeline {
             }
         stage('Checkout') {
             steps {
-                git branch 'main',
-                    url: 'https://github.com/svillarreal/ticketevolution.git'
+                git branch: 'main',
+                        url: 'https://github.com/svillarreal/ticketevolution.git'
             }
         }
         stage('Terraform Plan') {
